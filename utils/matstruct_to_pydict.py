@@ -1,9 +1,16 @@
+import scipy 
+import numpy as np
+
+
 # run below comand when in file that calls generate_dataset_obj 
 # decoded1 = scipy.io.loadmat(mat_path, struct_as_record=False)["RELEASE"]
 
 must_be_list_fields = ["annolist", "annorect", "point", "img_train", "single_person", "act", "video_list"]
 
 def generate_dataset_obj(obj):
+    """
+    Transforms the matlab struct to a python dict recursively
+    """
     if type(obj) == np.ndarray:
         dim = obj.shape[0]
         if dim == 1:
@@ -25,6 +32,9 @@ def generate_dataset_obj(obj):
         ret = obj
 
     return ret
+
+
+
 
 def print_dataset_obj(obj, depth = 0, maxIterInArray = 20):
     prefix = "  "*depth
