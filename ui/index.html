@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Joint Pose Estimator</h1>
+    <input type="file" id="photoupload"> <br>
+    <input id="submit" type="submit">
+    <div id="download-link"></div>
+  </body>
+  <script type="module">
+    import { API_URL, BUCKET_NAME, REGION} from "./constants.js";
+    import { addPhoto } from "./upload.js";
+
+    let bttn = document.getElementById("submit");
+    bttn.addEventListener("click", addPhoto, false);
+  </script>
+</html>

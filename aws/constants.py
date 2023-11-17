@@ -1,0 +1,1 @@
+BUCKET_NAME = "cs4701jointposeestimation"
