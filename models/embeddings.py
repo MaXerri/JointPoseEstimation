@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from constants import NUM_CHANNELS, HIDDEN_SIZE, HIDDEN_DROPOUT_PROB
+from models.constants_embeddings import NUM_CHANNELS, HIDDEN_SIZE, HIDDEN_DROPOUT_PROB
 
 class PatchEmbeddings(nn.Module):
   """
