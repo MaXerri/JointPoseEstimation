@@ -1,6 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Distribution / packaging
+bin/
 build/
+lib/
 lib64/
+var/
 .env
 env/
 **/*.ipynb_checkpoints/
+
+# Installer logs
+pip-log.txt
+
+# personal additions
 Data/
+personal.ipynb
