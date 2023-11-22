@@ -4,3 +4,4 @@ lib64/
 env/
 **/*.ipynb_checkpoints/
 Data/
+personal.ipynb
