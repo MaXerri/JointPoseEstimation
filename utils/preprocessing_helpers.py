@@ -21,3 +21,16 @@ def get_image_sizes(folder_path):
           sizes.append(img_size)
 
     return sizes
+
+def resize(dirs):
+    """
+    Searches the the directory located at path dirs and resizes iamges in this path
+    """
+    for item in dirs:
+        if os.path.isfile(path+item):
+            img = Image.open(path+item)
+            print(img.size)
+            f, e = os.path.splitext(path+item)
+            img = img.resize((224,224), Image.ANTIALIAS)
+            img.save(f + '.jpg')
+            print(img.size)
