@@ -31,6 +31,7 @@ class DecoderHeadSimple(nn.Module):
     def forward(self, x):
         x = self.deconv_layers(x)
         x = self.last_conv(x)
+        return x
 
     def  _make_deconv_layer(self, num_layers, num_filters, num_kernels):
         """
@@ -59,6 +60,7 @@ class DecoderHeadSimple(nn.Module):
         
         return nn.Sequential(*layers)
     
+    @staticmethod
     def _get_deconv_cfg(deconv_kernel):
         """
         setting kernel, padding and output_padding for deconvolution

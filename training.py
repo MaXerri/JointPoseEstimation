@@ -4,7 +4,6 @@ import numpy as np
 from datasets.custom_datasets import LSPDataset, MPIIDataset
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
-from models.transformer_block import TransformerBlock
 from models.pose_estimation_model import TransformerPoseModel
 from models.loss import JointsMSELoss
 
@@ -33,7 +32,7 @@ def main():
         acc_loss = 0
         for img, label in (train_loader):
             # Move the batch to the device
-            img, label = img.to(device) , label.to(device)
+            
             print("hello")
             output = model()
 

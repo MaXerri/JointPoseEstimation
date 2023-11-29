@@ -1,7 +1,7 @@
 import torch.nn as nn
 from models.transformer_block import TransformerBlock
 from models.head import DecoderHeadSimple
-from models.embeddings import PatchEmbeddings
+from models.embeddings import Embeddings
 
 class TransformerPoseModel(nn.Module):
     """
@@ -15,7 +15,7 @@ class TransformerPoseModel(nn.Module):
         self.num_deconv_layers = num_deconv_layers
         self.num_deconv_filters = num_deconv_filters
         self.num_deconv_kernels = num_deconv_kernels
-        self.embeds = PatchEmbeddings()
+        self.embeds = Embeddings()
         self.blocks = nn.ModuleList([])
 
         for _ in range(num_blocks):
@@ -31,6 +31,9 @@ class TransformerPoseModel(nn.Module):
         )
     
     def forward(self, x):
+
+        print("normalll")
+
         x = self.embeds(x) # pass to the patch embedding layer
 
         for blocks in self.blocks: # pass through the transformer blocks
