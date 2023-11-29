@@ -14,8 +14,8 @@ class PatchEmbeddings(nn.Module):
     self.patch_embed = nn.Conv2d(NUM_CHANNELS, HIDDEN_SIZE, self.patch_size, stride=self.patch_size) # (B,C,H,W)
 
   def forward(self,x):
-    x = self.patch_embed(x.float()).flatten(2)#.transpose(1, 2) # output of (B, #patches, new channel dimension)
-    x= torch.flatten(x,start_dim = 1)
+    x = self.patch_embed(x.float()).flatten(2) # output of (B, new channel dimension, #patches)
+    x= x.transpose(1,2) # (B, #patches, new channel dimension) ??
     return x
 
 
@@ -37,16 +37,18 @@ class Embeddings(nn.Module):
 
     # TODO add CLS token
 
-    num_patches = self.patch_embeddings.img_size[0] // self.patch_embeddings.patch_size[0] ** 2
+    num_patches = (self.patch_embeddings.img_size[0] // self.patch_embeddings.patch_size[0]) ** 2
 
     # creating positional embedding, this is a learned parameter
     # num_patches -> num_patches + 1 for adding CLS
     self.position_embed =  nn.Parameter(torch.randn(1, num_patches, HIDDEN_SIZE)) # this is without cls token for now
-    self.dropout = HIDDEN_DROPOUT_PROB
+    self.dropout = nn.Dropout(HIDDEN_DROPOUT_PROB)
 
   def forward(self, patches):
     # create embedding for this patch
     embeddings = self.patch_embeddings(patches)
+    print("pos embeddings")
+    print(embeddings.shape)
     batch_size = embeddings.size()[0]
 
     # TODO Add CLS tokens
