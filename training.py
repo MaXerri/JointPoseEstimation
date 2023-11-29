@@ -4,7 +4,7 @@ import numpy as np
 from datasets.custom_datasets import LSPDataset, MPIIDataset
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
-from models.transformer_block import ViT
+from models.transformer_block import TransformerBlock
 from models.pose_estimation_model import TransformerPoseModel
 
 def main():
