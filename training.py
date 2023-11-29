@@ -4,7 +4,7 @@ import numpy as np
 from datasets.custom_datasets import LSPDataset, MPIIDataset
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
-from models.visual_trasnformer import ViT
+from models.transformer_block import ViT
 
 def main():
     
