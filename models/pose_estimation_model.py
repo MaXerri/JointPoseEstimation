@@ -1,5 +1,5 @@
 import torch.nn as nn
-from models.transformer_block import ViT
+from models.transformer_block import TransformerBlock
 from head import DecoderHeadSimple
 from embeddings import PatchEmbeddings
 
@@ -15,7 +15,7 @@ class TransformerPoseModel(nn.Module):
         self.num_deconv_layers = num_deconv_layers
         self.num_deconv_filters = num_deconv_filters
         self.num_deconv_kernels = num_deconv_kernels
-        self.transformer_block = ViT()
+        self.transformer_block = TransformerBlock()
         self.embeds = PatchEmbeddings()
         self.blocks = nn.ModuleList([])
 

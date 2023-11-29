@@ -5,6 +5,7 @@ from datasets.custom_datasets import LSPDataset, MPIIDataset
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 from models.transformer_block import ViT
+from models.pose_estimation_model import TransformerPoseModel
 
 def main():
     
@@ -20,7 +21,7 @@ def main():
     
     # define model, optimizer and loss
 
-    model = ViT()
+    model = TransformerPoseModel()
     # prints out model parameters
     #for name, param in model.state_dict().items():
     #    print(name, param.size())

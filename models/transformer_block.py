@@ -7,7 +7,7 @@ from torch.nn import functional as F
 from models.constants_embeddings import NUM_CHANNELS, HIDDEN_SIZE, HIDDEN_DROPOUT_PROB, BATCH_SIZE, ATTENTION_HEADS, PATCH_DIM
 
 
-class Transformer(nn.Module):
+class TransformerBlock(nn.Module):
   """
   Singular Transformer block.
   """
