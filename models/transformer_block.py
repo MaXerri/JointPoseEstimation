@@ -1,6 +1,6 @@
-from embeddings import Embeddings, PatchEmbeddings
-from attention import attentionHead
-from feedforward import feedForward
+from models.embeddings import Embeddings, PatchEmbeddings
+from models.attention import attentionHead
+from models.feedforward import feedForward
 import torch
 import torch.nn as nn
 from torch.nn import functional as F

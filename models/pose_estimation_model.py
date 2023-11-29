@@ -1,7 +1,7 @@
 import torch.nn as nn
 from models.transformer_block import TransformerBlock
-from head import DecoderHeadSimple
-from embeddings import PatchEmbeddings
+from models.head import DecoderHeadSimple
+from models.embeddings import PatchEmbeddings
 
 class TransformerPoseModel(nn.Module):
     """
