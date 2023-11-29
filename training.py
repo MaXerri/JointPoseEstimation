@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 from models.transformer_block import TransformerBlock
 from models.pose_estimation_model import TransformerPoseModel
+from models.loss import JointsMSELoss
 
 def main():
     

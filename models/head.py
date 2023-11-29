@@ -6,9 +6,9 @@ class DecoderHeadSimple(nn.Module):
     """
     Heatmap based decoder head for the human pose estimation task.
     """
-    def __init__(self, in_channels, out_channels, num_deconv_layers=3,
-                 num_deconv_filters=(224, 224, 224),
-                 num_deconv_kernels=(2, 2, 2)): # ihis leads to an upscaling by a factor of 2 for each deconv block
+    def __init__(self, in_channels, out_channels, num_deconv_layers=2,
+                 num_deconv_filters=(224, 224),
+                 num_deconv_kernels=(2, 2)): # ihis leads to an upscaling by a factor of 2 for each deconv block
         
         super().__init__()
         self.in_channels = in_channels
