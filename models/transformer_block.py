@@ -18,7 +18,7 @@ class TransformerBlock(nn.Module):
     self.embedsize = HIDDEN_SIZE
     self.attention = attentionHead()
     self.ffn = feedForward()
-    self.norm1 = nn.LayerNorm((HIDDEN_SIZE,PATCH_DIM*PATCH_DIM))
+    self.norm1 = nn.LayerNorm((PATCH_DIM*PATCH_DIM,HIDDEN_SIZE))
     self.norm2 = nn.LayerNorm((PATCH_DIM*PATCH_DIM,HIDDEN_SIZE))
     
 
@@ -26,7 +26,7 @@ class TransformerBlock(nn.Module):
     print(x.shape)
     tensor1 = self.norm1(x)
     tensor1 = self.attention(tensor1)
-    tensor1 = tensor1 + torch.transpose(x,1,2)
+    tensor1 = tensor1 + x
     tensor2 = self.norm2(tensor1)
     tensor2 = self.ffn(tensor2)
     tensor2 = tensor2 + tensor1

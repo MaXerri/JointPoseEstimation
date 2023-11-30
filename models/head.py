@@ -1,17 +1,18 @@
 import torch
 import torch.nn as nn
-
+from models.constants_embeddings import PATCH_DIM, HIDDEN_SIZE
 
 class DecoderHeadSimple(nn.Module):
     """
     Heatmap based decoder head for the human pose estimation task.
     """
-    def __init__(self, in_channels, out_channels, num_deconv_layers=2,
+    def __init__(self, in_channels, out_channels = 14, num_deconv_layers=2,
                  num_deconv_filters=(224, 224),
                  num_deconv_kernels=(2, 2)): # ihis leads to an upscaling by a factor of 2 for each deconv block
         
         super().__init__()
         self.in_channels = in_channels
+        self.out_channels = out_channels
         
         self.deconv_layers = self._make_deconv_layer(
             num_deconv_layers,
@@ -21,7 +22,7 @@ class DecoderHeadSimple(nn.Module):
 
         self.last_conv = nn.Conv2d(
             in_channels=num_deconv_filters[-1],
-            out_channels=out_channels,
+            out_channels=self.out_channels,
             kernel_size=1,
             stride=1,
             padding=0
@@ -29,7 +30,13 @@ class DecoderHeadSimple(nn.Module):
 
 
     def forward(self, x):
-        x = self.deconv_layers(x)
+        x =torch.swapaxes(x,1, 2) # -> (batches, channels, #patches)
+        x = x.view((-1, HIDDEN_SIZE, PATCH_DIM, PATCH_DIM)) # ->( batches, channels, height, width)
+        
+        print("shape just before head")
+        print(x.shape)
+
+        x = self.deconv_layers(x) 
         x = self.last_conv(x)
         return x
 
@@ -37,9 +44,11 @@ class DecoderHeadSimple(nn.Module):
         """
         Create the deconvolution layers.
         """
+        print("im within _name_deconv_layer")
         assert num_layers == len(num_filters) == len(num_kernels)
 
         layers = []
+        
         for i in range(num_layers):
             kernel, padding, output_padding = self._get_deconv_cfg(num_kernels[i]) # selects for kernel sizes of 4,3,2 for the deconvolution layers
             planes = num_filters[i]
@@ -48,7 +57,7 @@ class DecoderHeadSimple(nn.Module):
                     in_channels=self.in_channels,
                     out_channels=planes,
                     kernel_size=kernel,
-                    stride=2,
+                    stride=2, 
                     padding=padding,
                     output_padding=output_padding,
                     bias=False

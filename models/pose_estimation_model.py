@@ -2,6 +2,7 @@ import torch.nn as nn
 from models.transformer_block import TransformerBlock
 from models.head import DecoderHeadSimple
 from models.embeddings import Embeddings
+from models.constants_embeddings import HIDDEN_SIZE # 768
 
 class TransformerPoseModel(nn.Module):
     """
@@ -23,7 +24,7 @@ class TransformerPoseModel(nn.Module):
             self.blocks.append(block)
 
         self.head = DecoderHeadSimple(
-            in_channels=224, # gotta check this info I think its the size of the patch 
+            in_channels= HIDDEN_SIZE, # gotta check this info I think its the size of the patch 
             out_channels=num_keypoints,
             num_deconv_layers=num_deconv_layers,
             num_deconv_filters=num_deconv_filters,

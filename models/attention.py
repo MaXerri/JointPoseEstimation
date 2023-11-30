@@ -15,9 +15,9 @@ class attentionHead(nn.Module):
     """
 
     dim = HIDDEN_SIZE
-    x = torch.transpose(x,1,2)
-    x = self.firstlin(x)
-    x = torch.reshape(x,(BATCH_SIZE,ATTENTION_HEADS,3,PATCH_DIM*PATCH_DIM,HIDDEN_SIZE/ATTENTION_HEADS)) 
+    # x = torch.transpose(x,1,2)
+    x = self.firstlin(x) # (B, #patches, hidden_size*3)
+    x = torch.reshape(x,(BATCH_SIZE,ATTENTION_HEADS,3,PATCH_DIM*PATCH_DIM,HIDDEN_SIZE//ATTENTION_HEADS)) 
     Q,K,V = torch.unbind(x,2)
     QK = torch.matmul(Q,torch.transpose(K,3,2))
     QK = F.softmax(QK,dim = -1) #May need to swap dimension of softmax
