@@ -34,3 +34,5 @@ def resize(dirs):
             img = img.resize((224,224), Image.ANTIALIAS)
             img.save(f + '.jpg')
             print(img.size)
+
+
