@@ -7,7 +7,7 @@ class JointsMSELoss(nn.Module):
     
   def forward(self, output, target):
     batch_size = output.shape[0]
-    num_joints = output.shape[0] # get number of joints for this image
+    num_joints = output.shape[1] # get #joints for this image of (batch_size, num_joints, height, width)
     heatmaps_pred = output.reshape((batch_size, num_joints, -1)).split(1, 1) # reshape heatmap predictions
     heatmaps_target = target.reshape((batch_size, num_joints, -1)).split(1, 1) # reshape target values 
     loss = 0
