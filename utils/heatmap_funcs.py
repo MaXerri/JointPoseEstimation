@@ -7,7 +7,7 @@ def generate_gaussian_heatmap(list_of_joint_list, resolution_size, sigma=1.5):
     Generate a Gaussian heatmap centered at a given coordinate.
 
     Parameters:
-    - list_of_joint_lists: 4D tensor of (batch_size, # joints, 3).
+    - list_of_joint_lists: 3D tensor of (batch_size, # joints, 3).
     - resolution_size: Tuple (height, width) representing the resolution of the heatmap.
     - sigma: Standard deviation of the Gaussian distribution.
 
@@ -42,6 +42,41 @@ def generate_gaussian_heatmap(list_of_joint_list, resolution_size, sigma=1.5):
         output[i] = heatmaps_for_n_joints
         
     return output
+
+def generate_single_image_gaussian(joint_list, resolution_size, sigma=1.5):
+    """
+    Generate a Gaussian heatmap centered at a given coordinate.
+
+    Parameters:
+    - list_of_joint_lists: 2D tensor of (# joints, 3).
+    - resolution_size: Tuple (height, width) representing the resolution of the heatmap.
+    - sigma: Standard deviation of the Gaussian distribution.
+
+    Returns:
+    - gaussian_heatmap: NumPy array representing the generated Gaussian heatmap.
+    """
+    heatmaps_for_n_joints = np.zeros((14, resolution_size[0], resolution_size[1]))
+    for j in range(14):
+        
+        if joint_list[j][2] == 1: # joint is visible 
+            
+            coordinate = joint_list[j]
+            gaussian_heatmap = np.zeros(resolution_size)
+            # Create meshgrids for the entire resolution_size
+            y, x = np.meshgrid(np.arange(resolution_size[0]), np.arange(resolution_size[1]))
+
+            # Use NumPy broadcasting for vectorized operations
+            gaussian_heatmap = np.exp(-((x - coordinate[0])**2 + (y - coordinate[1])**2) / (2.0 * sigma**2))
+
+            # Normalize the heatmap to have values between 0 and 1
+            gaussian_heatmap /= np.max(gaussian_heatmap)
+
+            heatmaps_for_n_joints[j] = gaussian_heatmap 
+        else:
+            heatmaps_for_n_joints[j] = np.ones(resolution_size) / 10.0 # set to low confidence value for non-visible joints
+    return heatmaps_for_n_joints
+
+
 
 def upsample_heatmap(heatmaps, target_resolution):
     """

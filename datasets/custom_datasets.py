@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from torchvision.io import read_image
+from utils.heatmap_funcs import generate_single_image_gaussian
 
 class MPIIDataset():
   # image_labels: List[Dict] of the filtered mpii annolist
@@ -46,6 +47,7 @@ class LSPDataset():
     img_path = self.img_dir + "resized_im" + '0'*(5-len(str(idx+1))) + str(idx + 1) + ".jpg"
     image = read_image(img_path)
 
-    label = self.image_labels[idx]
+    # generate heatmap label 
+    label = generate_single_image_gaussian(self.image_labels[idx], (256,256), 2.5)
 
     return image, label
