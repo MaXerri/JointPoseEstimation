@@ -32,3 +32,10 @@ def plot_with_joints(img, joints):
     plt.scatter(joints[:,0],joints[:,1])
     plt.imshow(img)
     plt.show()
+
+def plot_with_joints_r(img, x, y):
+    img = np.swapaxes(img,0,2)
+    img = np.swapaxes(img,0,1)
+    plt.scatter(x, y)
+    plt.imshow(img)
+    plt.show()
