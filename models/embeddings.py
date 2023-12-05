@@ -47,8 +47,8 @@ class Embeddings(nn.Module):
   def forward(self, patches):
     # create embedding for this patch
     embeddings = self.patch_embeddings(patches)
-    print("pos embeddings")
-    print(embeddings.shape)
+    #print("pos embeddings")
+    #print(embeddings.shape)
     batch_size = embeddings.size()[0]
 
     # TODO Add CLS tokens

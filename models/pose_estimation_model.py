@@ -32,14 +32,18 @@ class TransformerPoseModel(nn.Module):
         )
     
     def forward(self, x):
-
-        print("normalll")
+        
 
         x = self.embeds(x) # pass to the patch embedding layer
+
+        #print("embedding shape")
+        #print(x.shape)
 
         for blocks in self.blocks: # pass through the transformer blocks
             x = blocks(x)
 
+        #print("postT_trans shape")
+        #print(x.shape)
         x = self.head(x) # pass through the decoder head
 
         return x

@@ -23,7 +23,8 @@ class TransformerBlock(nn.Module):
     
 
   def forward(self,x):
-    print(x.shape)
+    #print("beginning trasnformer block")
+    #print(x.shape)
     tensor1 = self.norm1(x)
     tensor1 = self.attention(tensor1)
     tensor1 = tensor1 + x

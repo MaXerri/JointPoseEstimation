@@ -33,8 +33,6 @@ class DecoderHeadSimple(nn.Module):
         x =torch.swapaxes(x,1, 2) # -> (batches, channels, #patches)
         x = x.view((-1, HIDDEN_SIZE, PATCH_DIM, PATCH_DIM)) # ->( batches, channels, height, width)
         
-        print("shape just before head")
-        print(x.shape)
 
         x = self.deconv_layers(x) 
         x = self.last_conv(x)
@@ -44,7 +42,7 @@ class DecoderHeadSimple(nn.Module):
         """
         Create the deconvolution layers.
         """
-        print("im within _name_deconv_layer")
+
         assert num_layers == len(num_filters) == len(num_kernels)
 
         layers = []
