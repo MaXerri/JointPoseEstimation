@@ -9,18 +9,21 @@ class attentionHead(nn.Module):
     self.feats = HIDDEN_SIZE #TODO abstract this
     self.firstlin = nn.Linear(self.feats,self.feats*3)
 
-  def forward(self,x):
+  def forward(self,x, training):
     """
     x :
     """
-
+    if (training): 
+      batch_size = BATCH_SIZE
+    else:
+      batch_size = 1
     dim = HIDDEN_SIZE
     # x = torch.transpose(x,1,2)
     x = self.firstlin(x) # (B, #patches, hidden_size*3)
-    x = torch.reshape(x,(BATCH_SIZE,ATTENTION_HEADS,3,PATCH_DIM*PATCH_DIM,HIDDEN_SIZE//ATTENTION_HEADS)) 
+    x = torch.reshape(x,(batch_size,ATTENTION_HEADS,3,PATCH_DIM*PATCH_DIM,HIDDEN_SIZE//ATTENTION_HEADS)) 
     Q,K,V = torch.unbind(x,2)
     QK = torch.matmul(Q,torch.transpose(K,3,2))
-    QK = F.softmax(QK,dim = -1) #May need to swap dimension of softmax
+    # QK = F.softmax(QK,dim = -1) #May need to swap dimension of softmax
     out = torch.matmul(QK,V)
     out = torch.transpose(out,1,2)
     out = torch.flatten(out, start_dim = 2)

@@ -31,8 +31,7 @@ class TransformerPoseModel(nn.Module):
             num_deconv_kernels=num_deconv_kernels
         )
     
-    def forward(self, x):
-        
+    def forward(self, x, training):
 
         x = self.embeds(x) # pass to the patch embedding layer
 
@@ -40,7 +39,7 @@ class TransformerPoseModel(nn.Module):
         #print(x.shape)
 
         for blocks in self.blocks: # pass through the transformer blocks
-            x = blocks(x)
+            x = blocks(x, training)
 
         #print("postT_trans shape")
         #print(x.shape)

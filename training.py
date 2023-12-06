@@ -15,8 +15,8 @@ from utils.heatmap_funcs import generate_gaussian_heatmap, upsample_heatmap
 
 def main():
     
-    # dataset loading
-    #swap axis -> (n,#joints,cooridantes)
+# dataset loading
+#swap axis -> (n,#joints,cooridantes)
     annot = np.load('/home/mxerri/JointPoseEstimation/Data/lsp/leeds_sports_extended.npy')
     annot_s = np.swapaxes(annot, 0,2)
     annot_s = np.swapaxes(annot_s,1,2)
@@ -29,6 +29,9 @@ def main():
     # resize annotations
     for i in range(10000):
         annot_resize[i] = resize_single_joint(annot_s[i],image_sizes_resized[i],image_sizes[i] ) 
+        # make annortations into 56 x 56 for loss function 
+        annot_resize[i] = resize_single_joint(annot_resize[i],(56,56),(224,224))
+
     print(annot_resize.shape)
 
     # heatmap annotations are converted in the dataloader, otherwise we can change pagetable size 
@@ -36,23 +39,24 @@ def main():
 
     # create officia datasets and dataloaders for training
     dataset = LSPDataset(annot_resize,"/home/mxerri/JointPoseEstimation/Data/lsp/images224/")
-    dataset_mini = torch.utils.data.Subset(dataset,list(range(0,20)))
-    train_loader = DataLoader(dataset, batch_size=32, shuffle=False)
-    train_loader_mini = DataLoader(dataset_mini, batch_size=5, shuffle=False)
-        
+    dataset_mini = torch.utils.data.Subset(dataset,list(range(0,2000)))
+    train_loader = DataLoader(dataset, batch_size=16, shuffle=False)
+    train_loader_mini = DataLoader(dataset_mini, batch_size=16, shuffle=False)
+
+
     model = TransformerPoseModel(2)
     optimizer = optim.Adam(model.parameters(), lr=0.001)
     loss_func = JointsMSELoss()
 
-
-    for epoch in range(1):
+    print("begin training")
+    for epoch in range(10):
         total_loss = 0
-        
+        count = 0
         for batch_idx, (imgs, labels) in enumerate(train_loader_mini):
 
-            print(batch_idx)
-            print(imgs.shape)
-            print(labels.shape)
+            #print(batch_idx)
+            #print(imgs.shape)
+            #print(labels.shape)
 
             optimizer.zero_grad()
 
@@ -60,20 +64,22 @@ def main():
 
             # Heatmap dimensions are 56x56, so we need to resize at the end
 
-            print("model output shape")
-            print(output.shape)
+            #print("model output shape")
+            #print(output.shape)
 
-            loss = loss_func(output, labels)
-            loss = loss.item()
+            # upsample heatmap to 224 
+            #output = upsample_heatmap(output, (224,224)) # check this doesnt mess w back prop
+
+            loss = loss_func(output, labels.float())
             
             loss.backward()
             optimizer.step()
             total_loss += loss
 
-            
-            print("breaking")
-            break 
+        if epoch % 1 == 0:
+            print("epoch: ", epoch, "loss: ", total_loss)
 
+    torch.save(model.state_dict(), "/home/mxerri/JointPoseEstimation/Models/model.pt")
                 
 
 if __name__ == '__main__':
