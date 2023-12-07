@@ -22,7 +22,7 @@ def get_image_sizes(folder_path):
 
     return sizes
 
-def resize(dirs):
+def resize(dirs, path):
     """
     Searches the the directory located at path dirs and resizes iamges in this path
     """
