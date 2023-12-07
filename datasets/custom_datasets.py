@@ -4,10 +4,18 @@ from torchvision.io import read_image
 from utils.heatmap_funcs import generate_single_image_gaussian
 
 class MPIIDataset():
-  # image_labels: List[Dict] of the filtered mpii annolist
-  def __init__(self, image_labels, img_dir):
+  """
+  MPII pose dataset 
+
+  Parameters:
+    - image_labels: list of joint annotations of shape (n,14,3)
+    - image_name: list of image names corresponding to the joint annotations at the same index 
+    - img_dir: image directory to the location storing images
+  """
+  def __init__(self, image_labels, image_name, img_dir):
     self.image_labels = image_labels
     self.img_dir = img_dir
+    self.image_name = image_name
     # can add transforms if we need/want
 
   def __len__(self):
@@ -19,15 +27,23 @@ class MPIIDataset():
     #
     # image: torch.Tensor -> pytorch tensor representing image specified
     # label: list[dict] -> each dict contains x and y coordinate, joint id, and whether the joint is visible
-
-    img_path = self.img_dir + self.image_labels[idx]['image']['name']
+    
+    img_path = self.img_dir + self.image_name[idx]
     image = read_image(img_path)
-    label = self.image_labels['annorect']['annopoints']['point']
+
+    # generate heatmap label
+    label = generate_single_image_gaussian(self.image_labels[idx], (56,56), 2)
     
     return image, label
   
 class LSPDataset():
-  # image_labels: List[Dict] of the filtered mpii annolist
+  """
+  Leeds Sports pose dataset 
+
+  Parameters:
+    - image_labels: list of joint annotations of shape (n,14,3)
+    - img_dir: image directory to the location storing images
+  """
   def __init__(self, image_labels, img_dir):
     self.image_labels = image_labels
     self.img_dir = img_dir
