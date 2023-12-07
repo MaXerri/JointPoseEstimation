@@ -49,6 +49,7 @@ class LSPDataset():
     self.image_labels = image_labels
     self.image_names = image_names
     self.img_dir = img_dir
+    self.sigma = sigma
     # can add transforms if we need/want
 
   def __len__(self):
@@ -65,6 +66,6 @@ class LSPDataset():
     image = read_image(img_path)
 
     # generate heatmap label 
-    label = generate_single_image_gaussian(self.image_labels[idx], (56,56), 2)
+    label = generate_single_image_gaussian(self.image_labels[idx], (56,56), self.sigma)
 
-    return image, label
+    return image, label, img_path

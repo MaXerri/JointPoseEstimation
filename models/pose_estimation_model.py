@@ -16,11 +16,11 @@ class TransformerPoseModel(nn.Module):
         self.num_deconv_layers = num_deconv_layers
         self.num_deconv_filters = num_deconv_filters
         self.num_deconv_kernels = num_deconv_kernels
-        self.embeds = Embeddings()
+        self.embeds = Embeddings().to('mps')
         self.blocks = nn.ModuleList([])
 
         for _ in range(num_blocks):
-            block = TransformerBlock()
+            block = TransformerBlock().to('mps')
             self.blocks.append(block)
 
         self.head = DecoderHeadSimple(
@@ -29,7 +29,7 @@ class TransformerPoseModel(nn.Module):
             num_deconv_layers=num_deconv_layers,
             num_deconv_filters=num_deconv_filters,
             num_deconv_kernels=num_deconv_kernels
-        )
+        ).to('mps')
     
     def forward(self, x, training):
 
