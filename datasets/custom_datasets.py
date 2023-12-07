@@ -48,6 +48,6 @@ class LSPDataset():
     image = read_image(img_path)
 
     # generate heatmap label 
-    label = generate_single_image_gaussian(self.image_labels[idx], (56,56), 2)
+    label = generate_single_image_gaussian(self.image_labels[idx], (56,56), 1)
 
     return image, label
