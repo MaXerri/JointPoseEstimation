@@ -22,11 +22,11 @@ class TransformerBlock(nn.Module):
     self.norm2 = nn.LayerNorm((PATCH_DIM*PATCH_DIM,HIDDEN_SIZE))
     
 
-  def forward(self,x, training):
+  def forward(self,x, mode):
     #print("beginning trasnformer block")
     #print(x.shape)
     tensor1 = self.norm1(x)
-    tensor1 = self.attention(tensor1, training)
+    tensor1 = self.attention(tensor1, mode)
     tensor1 = tensor1 + x
     tensor2 = self.norm2(tensor1)
     tensor2 = self.ffn(tensor2)

@@ -9,13 +9,15 @@ class attentionHead(nn.Module):
     self.feats = HIDDEN_SIZE #TODO abstract this
     self.firstlin = nn.Linear(self.feats,self.feats*3)
 
-  def forward(self,x, training):
+  def forward(self,x, mode):
     """
     x :
     """
-    if (training): 
+    if mode == 'train': 
       batch_size = BATCH_SIZE
-    else:
+    elif mode == 'val':
+      batch_size = x.shape[0]
+    elif mode == 'pred':
       batch_size = 1
     dim = HIDDEN_SIZE
     # x = torch.transpose(x,1,2)
