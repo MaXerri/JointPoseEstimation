@@ -13,14 +13,7 @@ class attentionHead(nn.Module):
     """
     x :
     """
-    if mode == 'train': 
-      batch_size = BATCH_SIZE
-    elif mode == 'val':
-      batch_size = x.shape[0]
-    elif mode == 'pred':
-      batch_size = 1
-    dim = HIDDEN_SIZE
-    # x = torch.transpose(x,1,2)
+    batch_size = x.shape[0]
     x = self.firstlin(x) # (B, #patches, hidden_size*3)
     x = torch.reshape(x,(batch_size,ATTENTION_HEADS,3,PATCH_DIM*PATCH_DIM,HIDDEN_SIZE//ATTENTION_HEADS)) 
     Q,K,V = torch.unbind(x,2)
