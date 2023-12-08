@@ -36,3 +36,13 @@ def resize(dirs, path):
             print(img.size)
 
 
+def get_list_of_image_names(path):
+    """
+    Returns the names of all files within a directory in alphabetical order.  This
+    should only be used on folders with only images in them
+    """
+    path = "/home/mxerri/JointPoseEstimation/Data/lsp/images/"
+    dir_list = sorted(os.listdir(path))
+    return dir_list
+
+
