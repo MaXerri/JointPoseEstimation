@@ -45,7 +45,7 @@ class LSPDataset():
     - image_name: list of image names corresponding to the joint annotations at the same index 
     - img_dir: image directory to the location storing images
   """
-  def __init__(self, image_labels, image_names, img_dir):
+  def __init__(self, image_labels, image_names, img_dir, sigma):
     self.image_labels = image_labels
     self.image_names = image_names
     self.img_dir = img_dir
