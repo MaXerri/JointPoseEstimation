@@ -19,7 +19,7 @@ class MPIIDataset():
     # can add transforms if we need/want
 
   def __len__(self):
-    return len(self.image_labels)
+    return len(self.image_labels[0])
   
   def __getitem__(self, idx):
     # inputs
