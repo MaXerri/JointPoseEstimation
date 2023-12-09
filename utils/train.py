@@ -50,8 +50,6 @@ def train(epochs, model, optimizer, loss_func, data_loader, device, verbose=True
             print(f"AVG optimizer step time: {optimizer_time_total / num_batches}")
             # displayHeatmap(output)
             # test_plot()
-        print(epoch)
-        print((epoch + 1) % save_freq == 0)
         if save_name is not None and save_freq is not None and (epoch + 1) % save_freq == 0:
             torch.save(model.state_dict(), f'./trained_models/{save_name}_{epoch+1}.pth')
     if save_name is not None:
