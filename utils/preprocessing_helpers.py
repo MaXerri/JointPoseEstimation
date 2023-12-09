@@ -22,18 +22,29 @@ def get_image_sizes(folder_path):
 
     return sizes
 
-def resize(dirs, path):
+def resize_images(input_folder, output_folder, new_size):
     """
-    Searches the the directory located at path dirs and resizes iamges in this path
+    Resize all images in a folder to a given size and store in another folder that already exists.
+
+    input folder: path to the folder containing the original images
+    output folder: path to the folder where the resized images will be stored
+    Size:  a size 2 tuple (width, height)
     """
-    for item in dirs:
-        if os.path.isfile(path+item):
-            img = Image.open(path+item)
-            print(img.size)
-            f, e = os.path.splitext(path+item)
-            img = img.resize((224,224), Image.ANTIALIAS)
-            img.save(f + '.jpg')
-            print(img.size)
+
+    # Loop through all files in the input folder
+    for filename in os.listdir(input_folder):
+        input_path = os.path.join(input_folder, filename)
+        
+        # Check if the file is an image (you can add more file type checks if needed)
+        if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+            # Open the image
+            with Image.open(input_path) as img:
+                # Resize the image
+                resized_img = img.resize(new_size)
+                
+                # Save the resized image to the output folder
+                output_path = os.path.join(output_folder, f"re_{filename}")
+                resized_img.save(output_path)
 
 
 def get_list_of_image_names(path):
