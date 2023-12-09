@@ -39,7 +39,7 @@ def plot_many(model, device, data_loader):
       break
     im = torchvision.io.read_image(path)
     im = torch.unsqueeze(im, 0)
-    im = im.to(mps_device)
+    im = im.to(device)
 
     joints = model(im, 'pred')
     joints = joints.squeeze()
