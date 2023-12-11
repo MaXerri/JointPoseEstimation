@@ -23,8 +23,8 @@ class attentionHead(nn.Module):
     Q,K,V = torch.unbind(x,2)
     # calculations for the trasnformer equation: QK^T/sqrt(d_k)
     QK = torch.matmul(Q,torch.transpose(K,3,2))
-    QK = QK / math.sqrt(HIDDEN_SIZE//ATTENTION_HEADS)
-    QK = F.softmax(QK,dim = -1) #May need to swap dimension of softmax
+    # QK = QK / math.sqrt(HIDDEN_SIZE//ATTENTION_HEADS)
+    # QK = F.softmax(QK,dim = -1) #May need to swap dimension of softmax
     out = torch.matmul(QK,V)
     # get back to shape (B, #patches, hidden_size)
     out = torch.transpose(out,1,2)
