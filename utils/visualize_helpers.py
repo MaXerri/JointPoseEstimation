@@ -15,6 +15,9 @@ def test_plot(model, device):
   im = torch.unsqueeze(im, 0)
   im = im.to(device)
 
+  
+
+
   joints = model(im, False)
   # displayHeatmap(joints)
   joints = joints.squeeze()
