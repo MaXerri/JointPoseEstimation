@@ -69,7 +69,7 @@ def resize_images_filter(input_folder, output_folder, new_size, name_list):
                 resized_img = img.resize(new_size)
                 
                 # Save the resized image to the output folder
-                output_path = os.path.join(output_folder, f"re_{filename}")
+                output_path = os.path.join(output_folder, f"{filename}")
                 resized_img.save(output_path)
 
 
