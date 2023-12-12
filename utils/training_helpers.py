@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 
 
 def batched_resize_joint(joints, resize_dim, original_dim):
@@ -33,9 +34,11 @@ def plot_with_joints(img, joints):
     plt.imshow(img)
     plt.show()
 
-def plot_with_joints_r(img, x, y):
+def plot_with_joints_r(img, x, y, tx=[], ty=[]):
     img = np.swapaxes(img,0,2)
     img = np.swapaxes(img,0,1)
-    plt.scatter(x, y)
+    plt.scatter(x, y, c=mcolors.CSS4_COLORS['deepskyblue'])
+    if len(tx) != 0:
+        plt.scatter(tx, ty, c=mcolors.CSS4_COLORS['chartreuse'])
     plt.imshow(img)
     plt.show()

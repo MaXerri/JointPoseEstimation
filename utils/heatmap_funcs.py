@@ -43,7 +43,7 @@ def generate_gaussian_heatmap(list_of_joint_list, resolution_size, sigma=1.5):
         
     return output
 
-def generate_single_image_gaussian(joint_list, resolution_size, sigma=1.5):
+def generate_single_image_gaussian(joint_list, resolution_size, sigma=1.5, inv=False):
     """
     Generate a Gaussian heatmap centered at a given coordinate.
 
@@ -56,9 +56,12 @@ def generate_single_image_gaussian(joint_list, resolution_size, sigma=1.5):
     - gaussian_heatmap: NumPy array representing the generated Gaussian heatmap.
     """
     heatmaps_for_n_joints = np.zeros((14, resolution_size[0], resolution_size[1]))
+    if inv:
+        in_frame = 0
+    else:
+        in_frame == 1
     for j in range(14):
-        
-        if joint_list[j][2] == 1: # joint is visible 
+        if joint_list[j][2] == in_frame: # joint is visible 
             
             coordinate = joint_list[j]
             gaussian_heatmap = np.zeros(resolution_size)

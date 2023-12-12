@@ -15,9 +15,6 @@ def test_plot(model, device):
   im = torch.unsqueeze(im, 0)
   im = im.to(device)
 
-  
-
-
   joints = model(im, False)
   # displayHeatmap(joints)
   joints = joints.squeeze()
@@ -35,7 +32,7 @@ def test_plot(model, device):
   im = im.cpu()
   plot_with_joints_r(im, x, y)
 
-def plot_many(model, device, data_loader):
+def plot_many(model, device, data_loader, showTrue=False):
   for batch_idx, (imgs, labels, path) in enumerate(data_loader):
     path = path[0]
     if batch_idx == 50:
@@ -49,13 +46,25 @@ def plot_many(model, device, data_loader):
     im = im.squeeze()
     x = []
     y = []
+    tx = []
+    ty = []
     for joint in joints:
       # print(f"max: {(joint==torch.max(joint)).nonzero()}")
       coor = (joint==torch.max(joint)).nonzero()
       x.append(int(coor[0][0] * 4))
       y.append(int(coor[0][1] * 4))
+
+    if showTrue:
+      labels = labels[0]
+      for true_joint in labels:
+        print(torch.max(true_joint))
+        if torch.max(true_joint) > .1:
+          t_coor = (true_joint==torch.max(true_joint)).nonzero()
+          tx.append(int(t_coor[0][0] * 4))
+          ty.append(int(t_coor[0][1] * 4))
+
     im = im.cpu()
-    plot_with_joints_r(im, x, y)
+    plot_with_joints_r(im, x, y, tx, ty)
   
 def plot_all_heatmaps(model, device, data_loader):
   imgs, labels, path = next(iter(data_loader))
