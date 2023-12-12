@@ -56,3 +56,9 @@ def plot_many(model, device, data_loader):
       y.append(int(coor[0][1] * 4))
     im = im.cpu()
     plot_with_joints_r(im, x, y)
+  
+def plot_all_heatmaps(model, device, data_loader):
+  imgs, labels, path = next(iter(data_loader))
+  imgs = imgs.to(device)
+  preds = model(imgs, 'pred')
+  displayHeatmaps(preds)
