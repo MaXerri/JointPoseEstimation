@@ -9,7 +9,10 @@ def validate(model, optimizer, loss_func, data_loader, device):
   num_predicted_joints = 0
   num_true_joints = 0
   prev_percent = -1
-  for batch_idx, (imgs, labels, _) in enumerate(data_loader):
+  best = ''
+  best_num_correct = 0
+  count = 0
+  for batch_idx, (imgs, labels, paths) in enumerate(data_loader):
     imgs = imgs.to(device)
     labels = labels.float()
     labels = labels.to(device)
@@ -23,19 +26,23 @@ def validate(model, optimizer, loss_func, data_loader, device):
     total_loss += loss
 
     for i in range(labels.shape[0]): # for each image in batch
+      curr_num_correct = 0
       for j in range(labels.shape[1]): # for each joint in predictions
         true_joint = labels[i][j]
         pred_joint = output[i][j]
+        count += 1
         if torch.max(true_joint) > .1:
           num_true_joints += 1
-          if torch.max(pred_joint) < .1:
-            break
+          if torch.max(pred_joint) <= .1:
+            continue
           num_predicted_joints += 1
           true_coor = (true_joint==torch.max(true_joint)).nonzero()[0]
           pred_coor = (pred_joint==torch.max(pred_joint)).nonzero()[0]
           dist = (true_coor - pred_coor).pow(2).sum(dim=0).sqrt()
           if dist <= 8:
             num_correct_joints += 1
+            curr_num_correct += 1
+      if curr_num_correct > best_num_correct: best = paths[i]
     percent = int(batch_idx / len(data_loader) * 100)
 
     if percent % 10 == 0 and percent != prev_percent:
@@ -57,3 +64,6 @@ def validate(model, optimizer, loss_func, data_loader, device):
   print(f'num_correct_joints: {num_correct_joints}')
   print(f'num_predicted_joints: {num_predicted_joints}')
   print(f'num_true_joints: {num_true_joints}')
+  print(f'count: {count}')
+
+  return best

@@ -59,7 +59,7 @@ def generate_single_image_gaussian(joint_list, resolution_size, sigma=1.5, inv=F
     if inv:
         in_frame = 0
     else:
-        in_frame == 1
+        in_frame = 1
     for j in range(14):
         if joint_list[j][2] == in_frame: # joint is visible 
             
