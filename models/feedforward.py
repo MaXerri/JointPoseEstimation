@@ -11,5 +11,6 @@ class feedForward(nn.Module):
     self.lay1 = nn.Linear(self.indim,self.outdim)
     self.lay2 = nn.Linear(self.outdim,self.indim)
     self.relu = nn.ReLU()
+    self.dropout = nn.Dropout(.5)
   def forward(self,x):
-    return self.lay2(self.relu(self.lay1(x)))
+    return self.dropout(self.lay2(self.relu(self.lay1(x))))
