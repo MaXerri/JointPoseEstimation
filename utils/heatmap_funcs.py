@@ -28,7 +28,7 @@ def generate_gaussian_heatmap(list_of_joint_list, resolution_size, sigma=1.5):
                 coordinate = list_of_joint_list[i][j]
                 gaussian_heatmap = np.zeros(resolution_size)
                 # Create meshgrids for the entire resolution_size
-                y, x = np.meshgrid(np.arange(resolution_size[0]), np.arange(resolution_size[1]))
+                x, y = np.meshgrid(np.arange(resolution_size[0]), np.arange(resolution_size[1]))
 
                 # Use NumPy broadcasting for vectorized operations
                 gaussian_heatmap = np.exp(-((x - coordinate[0])**2 + (y - coordinate[1])**2) / (2.0 * sigma**2))
@@ -66,7 +66,7 @@ def generate_single_image_gaussian(joint_list, resolution_size, sigma=1.5, inv=F
             coordinate = joint_list[j]
             gaussian_heatmap = np.zeros(resolution_size)
             # Create meshgrids for the entire resolution_size
-            y, x = np.meshgrid(np.arange(resolution_size[0]), np.arange(resolution_size[1]))
+            x, y = np.meshgrid(np.arange(resolution_size[0]), np.arange(resolution_size[1]))
 
             # Use NumPy broadcasting for vectorized operations
             gaussian_heatmap = np.exp(-((x - coordinate[0])**2 + (y - coordinate[1])**2) / (2.0 * sigma**2))
