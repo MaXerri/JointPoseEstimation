@@ -18,8 +18,11 @@ class TransformerBlock(nn.Module):
     self.embedsize = HIDDEN_SIZE
     self.attention = attentionHead()
     self.ffn = feedForward()
-    self.norm1 = nn.LayerNorm((PATCH_DIM*PATCH_DIM,HIDDEN_SIZE))
-    self.norm2 = nn.LayerNorm((PATCH_DIM*PATCH_DIM,HIDDEN_SIZE))
+    # unsure of the difference
+    # self.norm1 = nn.LayerNorm((PATCH_DIM*PATCH_DIM,HIDDEN_SIZE))
+    # self.norm2 = nn.LayerNorm((PATCH_DIM*PATCH_DIM,HIDDEN_SIZE))
+    self.norm1 = nn.LayerNorm(HIDDEN_SIZE)
+    self.norm2 = nn.LayerNorm(HIDDEN_SIZE)
     
 
   def forward(self,x, mode):
