@@ -11,6 +11,8 @@ class CustomDataset():
     - image_labels: list of joint annotations of shape (n,14,3)
     - image_name: list of image names corresponding to the joint annotations at the same index 
     - img_dir: image directory to the location storing images
+    - sigma: gaussian blur standrad deviation
+    - inv: True when 0 represents a visible joint (lsp_og)
   """
   def __init__(self, image_labels, image_names, img_dir, sigma, inv=False):
     self.image_labels = image_labels
