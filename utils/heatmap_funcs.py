@@ -76,7 +76,7 @@ def generate_single_image_gaussian(joint_list, resolution_size, sigma=1.5, inv=F
 
             heatmaps_for_n_joints[j] = gaussian_heatmap 
         else:
-            heatmaps_for_n_joints[j] = np.ones(resolution_size) / 10.0 # set to low confidence value for non-visible joints
+            heatmaps_for_n_joints[j] = np.zeros(resolution_size)  # set to low confidence value for non-visible joints (changed from .1)
     return heatmaps_for_n_joints
 
 
