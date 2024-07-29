@@ -9,7 +9,7 @@ class attentionHead(nn.Module):
     super().__init__()
     self.feats = HIDDEN_SIZE #TODO abstract this
     self.firstlin = nn.Linear(self.feats,self.feats*3)
-    self.dropout = nn.Dropout(.5)
+    self.dropout = nn.Dropout(HIDDEN_DROPOUT_PROB)
 
   def forward(self,x, mode):
     """
@@ -25,7 +25,7 @@ class attentionHead(nn.Module):
     out = torch.matmul(QK,V)
     out = torch.transpose(out,1,2)
     out = torch.flatten(out, start_dim = 2)
-    out = self.dropout(out)
+    out = self.dropout(HIDDEN_DROPOUT_PROB)
     
     return out
 
