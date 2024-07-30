@@ -15,7 +15,7 @@ class CustomDataset():
     - inv: True when 0 represents a visible joint (lsp_og)
   """
   def __init__(self, image_labels, image_names, img_dir, sigma, inv=False):
-    length = self.image_labels.shape[0]
+    length = image_labels.shape[0]
     self.image_labels = image_labels
     self.image_names = image_names
     self.img_dir = [img_dir * length]
