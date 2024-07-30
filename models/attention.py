@@ -24,7 +24,7 @@ class attentionHead(nn.Module):
     # These 3 lines were skipped during original training
     QK = QK / math.sqrt(HIDDEN_SIZE//ATTENTION_HEADS)
     QK = F.softmax(QK,dim = -1) #May need to swap dimension of softmax
-    out = self.dropout(HIDDEN_DROPOUT_PROB)
+    out = self.dropout(QK)
 
     out = torch.matmul(QK,V)
     out = torch.transpose(out,1,2)
