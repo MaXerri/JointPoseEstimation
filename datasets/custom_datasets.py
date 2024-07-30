@@ -15,11 +15,12 @@ class CustomDataset():
     - inv: True when 0 represents a visible joint (lsp_og)
   """
   def __init__(self, image_labels, image_names, img_dir, sigma, inv=False):
+    length = self.image_labels.shape[0]
     self.image_labels = image_labels
     self.image_names = image_names
-    self.img_dir = img_dir
-    self.sigma = sigma
-    self.inv = inv
+    self.img_dir = [img_dir * length]
+    self.sigma = [sigma * length]
+    self.inv = [inv * length]
     # can add transforms if we need/want
 
   def __len__(self):
@@ -32,10 +33,10 @@ class CustomDataset():
 
     
     # img_path = self.img_dir + "resized_im" + '0'*(5-len(str(idx+1))) + str(idx + 1) + ".jpg"
-    img_path = self.img_dir + self.image_names[idx]
+    img_path = self.img_dir[idx] + self.image_names[idx]
     image = read_image(img_path)
 
     # generate heatmap label 
-    label = generate_single_image_gaussian(self.image_labels[idx], (56,56), self.sigma, self.inv)
+    label = generate_single_image_gaussian(self.image_labels[idx], (56,56), self.sigma[idx], self.inv[idx])
 
     return image, label, img_path
