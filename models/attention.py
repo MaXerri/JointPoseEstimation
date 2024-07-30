@@ -20,12 +20,15 @@ class attentionHead(nn.Module):
     x = torch.reshape(x,(batch_size,ATTENTION_HEADS,3,PATCH_DIM*PATCH_DIM,HIDDEN_SIZE//ATTENTION_HEADS)) 
     Q,K,V = torch.unbind(x,2)
     QK = torch.matmul(Q,torch.transpose(K,3,2))
-    #QK = QK / math.sqrt(HIDDEN_SIZE//ATTENTION_HEADS)
-    #QK = F.softmax(QK,dim = -1) #May need to swap dimension of softmax
+
+    # These 3 lines were skipped during original training
+    QK = QK / math.sqrt(HIDDEN_SIZE//ATTENTION_HEADS)
+    QK = F.softmax(QK,dim = -1) #May need to swap dimension of softmax
+    out = self.dropout(HIDDEN_DROPOUT_PROB)
+
     out = torch.matmul(QK,V)
     out = torch.transpose(out,1,2)
     out = torch.flatten(out, start_dim = 2)
-    out = self.dropout(HIDDEN_DROPOUT_PROB)
     
     return out
 
