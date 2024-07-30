@@ -5,26 +5,30 @@ from utils.heatmap_funcs import generate_single_image_gaussian
   
 class CustomDataset():
   """
-  Custom Pose Dataset
+  Custom Pose Dataset modelled after the Joint structur eof the LSP dataset.  
+  Other datasets have to be preprocessed to be in this 14 joint format.
 
-  Parameters:
-    - image_labels: list of joint annotations of shape (n,14,3)
-    - image_name: list of image names corresponding to the joint annotations at the same index 
-    - img_dir: image directory to the location storing images
-    - sigma: gaussian blur standrad deviation
-    - inv: True when 0 represents a visible joint (lsp_og)
+  Args: 
+      train_data: list of tuples/lists in the following format: [image_labels, image_name, img_dir, sigma, inv] 
+
+      - image_labels: list of joint annotations of shape (n,14,3)
+      - image_name: list of image names corresponding to the joint annotations at the same index 
+      - img_dir: image directory to the location storing images
+      - sigma: gaussian blur standrad deviation
+      - inv: True when 0 represents a visible joint (lsp_og)
+      
+  Returns: The image as a tensor, the joint heatmap labels, and the path to the image
   """
-  def __init__(self, image_labels, image_names, img_dir, sigma, inv=False):
-    length = image_labels.shape[0]
-    self.image_labels = image_labels
-    self.image_names = image_names
-    self.img_dir = [img_dir * length]
-    self.sigma = [sigma * length]
-    self.inv = [inv * length]
+  #def __init__(self, image_labels, image_names, img_dir, sigma, inv=False):
+  def __init__(self, train_data):
+
+    self.train_data = train_data
+
+    
     # can add transforms if we need/want
 
   def __len__(self):
-    return (self.image_labels.shape[0])
+    return (len(self.train_data))
 
   def __getitem__(self, idx):
     # idx: int -> index of image sample
@@ -33,10 +37,12 @@ class CustomDataset():
 
     
     # img_path = self.img_dir + "resized_im" + '0'*(5-len(str(idx+1))) + str(idx + 1) + ".jpg"
-    img_path = self.img_dir[idx] + self.image_names[idx]
+    #img_path = self.img_dir[idx] + self.image_names[idx]
+    img_path = self.train_data[idx][2] + self.train_data[idx][1]
     image = read_image(img_path)
 
     # generate heatmap label 
-    label = generate_single_image_gaussian(self.image_labels[idx], (56,56), self.sigma[idx], self.inv[idx])
+    # label = generate_single_image_gaussian(self.image_labels[idx], (56,56), self.sigma[idx], self.inv[idx])
+    label = generate_single_image_gaussian(self.train_data[idx][0], (56,56), self.train_data[idx][3], self.train_data[idx][4])
 
     return image, label, img_path
