@@ -28,10 +28,11 @@ class attentionHead(nn.Module):
     batch_size = x.shape[0] 
     num_patches = x.shape[1]
     x = self.first_proj(x) # (B, #patches, all_heads_dim*3)
+
     #x = torch.reshape(x,(batch_size,ATTENTION_HEADS,3,PATCH_DIM*PATCH_DIM,HIDDEN_SIZE//ATTENTION_HEADS)) 
     #Q,K,V = torch.unbind(x,2)
     
-    x = torch.reshape(batch_size, num_patches, 3, self.num_heads, -1).permute(2,0,3,1,4)
+    x = x.reshape(batch_size, num_patches, 3, self.num_heads, -1).permute(2,0,3,1,4)
     Q,K,V = x[0],x[1],x[2] 
     
     QK = torch.matmul(Q,torch.transpose(K,3,2))
