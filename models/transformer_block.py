@@ -26,8 +26,9 @@ class TransformerBlock(nn.Module):
     
 
   def forward(self,x, mode):
-    #print("beginning trasnformer block")
+    
     #print(x.shape)
+    # couldd experiment w drop paths
     tensor1 = self.norm1(x)
     tensor1 = self.attention(tensor1, mode)
     tensor1 = tensor1 + x

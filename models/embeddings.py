@@ -19,12 +19,6 @@ class PatchEmbeddings(nn.Module):
     return x
 
 
-  #print(input.shape)
-
-  #print(input.shape)
-  #print(output)
-  #embed = patch_embedding(i)
-  #print(embed)
 
 class Embeddings(nn.Module):
   """
@@ -39,7 +33,7 @@ class Embeddings(nn.Module):
 
     num_patches = (self.patch_embeddings.img_size[0] // self.patch_embeddings.patch_size[0]) ** 2
 
-    # creating positional embedding, this is a learned parameter
+    # creating positional embedding learned parameter
     # num_patches -> num_patches + 1 for adding CLS
     self.position_embed =  nn.Parameter(torch.randn(1, num_patches, HIDDEN_SIZE)) # this is without cls token for now
     self.dropout = nn.Dropout(HIDDEN_DROPOUT_PROB)
@@ -47,11 +41,8 @@ class Embeddings(nn.Module):
   def forward(self, patches):
     # create embedding for this patch
     embeddings = self.patch_embeddings(patches)
-    #print("pos embeddings")
-    #print(embeddings.shape)
-    batch_size = embeddings.size()[0]
-
-    # TODO Add CLS tokens
+    #print("pos embeddings ", embeddings.shape)
+    
 
     # add positional embedding to patch embedding
     embeddings = embeddings + self.position_embed

@@ -23,7 +23,7 @@ class attentionHead(nn.Module):
 
   def forward(self,x, mode):
     """
-    x input shape: (batach, num_patches, channel)
+    x input shape: (batach, num_patches, hiddent_size)
     """
     batch_size = x.shape[0] 
     num_patches = x.shape[1]
