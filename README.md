@@ -4,4 +4,8 @@ Human pose estimation is the task of localizing key joint locations given a pict
 
 
 
+We have returned to this project in the summer of 2024 after completing our undergraduate degrees and are working to finalize model training and to create a user interface for the model. 
+
+
+
 
