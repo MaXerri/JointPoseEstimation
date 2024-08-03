@@ -36,7 +36,7 @@ def train(epochs, model, optimizer, loss_func, data_loader, device, verbose=True
             optimizer_start_time = datetime.datetime.now()
             optimizer.step()
             optimizer_time_total = datetime.datetime.now() - optimizer_start_time
-            total_loss += loss
+            total_loss += loss.item() # detatch
             
         if verbose:
             print("epoch:", epoch, "loss: ", total_loss)

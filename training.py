@@ -74,7 +74,7 @@ def main():
             
             loss.backward()
             optimizer.step()
-            total_loss += loss
+            total_loss += loss.item()
 
         if epoch % 1 == 0:
             print("epoch: ", epoch, "loss: ", total_loss)
