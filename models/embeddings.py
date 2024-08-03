@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from models.constants_embeddings import NUM_CHANNELS, HIDDEN_SIZE, HIDDEN_DROPOUT_PROB
+from models.constants_embeddings import NUM_CHANNELS, HIDDEN_SIZE, EMBEDDING_DROPOUT_PROB
 
 class PatchEmbeddings(nn.Module):
   """
@@ -36,7 +36,7 @@ class Embeddings(nn.Module):
     # creating positional embedding learned parameter
     # num_patches -> num_patches + 1 for adding CLS
     self.position_embed =  nn.Parameter(torch.randn(1, num_patches, HIDDEN_SIZE)) # this is without cls token for now
-    self.dropout = nn.Dropout(HIDDEN_DROPOUT_PROB)
+    self.dropout = nn.Dropout(EMBEDDING_DROPOUT_PROB)
 
   def forward(self, patches):
     # create embedding for this patch
