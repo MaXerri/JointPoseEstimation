@@ -17,7 +17,7 @@ class attentionHead(nn.Module):
     all_heads_dim = head_dim * self.num_heads
 
     self.first_proj = nn.Linear(self.feats,all_heads_dim *3) # for original config these 2 nums are equal
-    self.last_proj = nn.Linear(self.all_heads_dim,self.feats)
+    self.last_proj = nn.Linear(all_heads_dim,self.feats)
     self.dropout = nn.Dropout(HIDDEN_DROPOUT_PROB)
     self.last_proj_drop = nn.Dropout(0) # add config param
 
