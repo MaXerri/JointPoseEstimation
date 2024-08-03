@@ -8,7 +8,7 @@ class DecoderHeadSimple(nn.Module):
     """
     def __init__(self, in_channels, out_channels = 14, num_deconv_layers=2,
                  num_deconv_filters=(224, 224),
-                 num_deconv_kernels=(2, 2)): # ihis leads to an upscaling by a factor of 2 for each deconv block
+                 num_deconv_kernels=(4, 4)): 
         
         super().__init__()
         self.in_channels = in_channels
