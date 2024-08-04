@@ -14,8 +14,8 @@ class JointsMSELoss(nn.Module):
     loss = 0
 
     for joint_idx in range(num_joints):
-      heatmap_pred = heatmaps_pred[joint_idx].squeeze()
-      heatmap_target = heatmaps_target[joint_idx].squeeze()
+      heatmap_pred = heatmaps_pred[joint_idx].squeeze(1)
+      heatmap_target = heatmaps_target[joint_idx].squeeze(1)
 
       loss += 1 * self.mse(heatmap_pred, heatmap_target)
     
