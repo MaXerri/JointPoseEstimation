@@ -7,13 +7,13 @@ class feedForward(nn.Module):
   """
   MLP for the transformer block
   """
-  def __init__(self):
+  def __init__(self, activ):
     super().__init__()
     self.indim = HIDDEN_SIZE
     self.outdim = HIDDEN_SIZE
     self.lay1 = nn.Linear(self.indim,self.outdim)
     self.lay2 = nn.Linear(self.outdim,self.indim)
-    self.relu = nn.ReLU() # test out changing to differnt activations
+    self.activ = activ() # test out changing to differnt activations
     self.dropout = nn.Dropout(HIDDEN_DROPOUT_PROB)
   def forward(self,x):
-    return self.dropout(self.lay2(self.relu(self.lay1(x))))
+    return self.dropout(self.lay2(self.activ(self.lay1(x))))

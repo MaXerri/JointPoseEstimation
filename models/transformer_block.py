@@ -17,7 +17,7 @@ class TransformerBlock(nn.Module):
     self.patch_size = (16,16)
     self.embedsize = HIDDEN_SIZE
     self.attention = attentionHead()
-    self.ffn = feedForward()
+    self.ffn = feedForward(nn.GELU)
     # unsure of the difference
     # self.norm1 = nn.LayerNorm((PATCH_DIM*PATCH_DIM,HIDDEN_SIZE))
     # self.norm2 = nn.LayerNorm((PATCH_DIM*PATCH_DIM,HIDDEN_SIZE))
