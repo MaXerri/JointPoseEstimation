@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-from models.constants_embeddings import NUM_CHANNELS, HIDDEN_SIZE, HIDDEN_DROPOUT_PROB, BATCH_SIZE, ATTENTION_HEADS, PATCH_DIM
+from models.constants_embeddings import NUM_CHANNELS, HIDDEN_SIZE, HIDDEN_DROPOUT_PROB, ATTN_DROPOUT_PROB, BATCH_SIZE, ATTENTION_HEADS, PATCH_DIM
 import math
 
 class attentionHead(nn.Module):
@@ -18,12 +18,12 @@ class attentionHead(nn.Module):
 
     self.first_proj = nn.Linear(self.feats,all_heads_dim *3) # for original config these 2 nums are equal
     self.last_proj = nn.Linear(all_heads_dim,self.feats)
-    self.dropout = nn.Dropout(HIDDEN_DROPOUT_PROB)
+    self.dropout = nn.Dropout(ATTN_DROPOUT_PROB)
     self.last_proj_drop = nn.Dropout(HIDDEN_DROPOUT_PROB) # add config param
 
   def forward(self,x, mode):
     """
-    x input shape: (batach, num_patches, hiddent_size)
+    x input shape: (batach, num_patches, hidden_size)
     """
     batch_size = x.shape[0] 
     num_patches = x.shape[1]
