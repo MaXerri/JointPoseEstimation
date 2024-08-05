@@ -3,7 +3,7 @@ import torch.nn as nn
 class JointsMSELoss(nn.Module):
   def __init__(self):
     super(JointsMSELoss, self).__init__()
-    self.mse = nn.MSELoss(size_average=True)
+    self.mse = nn.MSELoss(reduction="mean")
     
   def forward(self, output, target):
     batch_size = output.shape[0]
