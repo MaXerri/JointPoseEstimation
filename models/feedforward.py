@@ -6,6 +6,8 @@ from models.constants_embeddings import NUM_CHANNELS, HIDDEN_SIZE, HIDDEN_DROPOU
 class feedForward(nn.Module):
   """
   MLP for the transformer block
+
+  mlp_interm_factor: factor by which the hidden size is multiplied to get the intermediate dimension of the MLP
   """
   def __init__(self, activ, mlp_interm_factor = 4):
     super().__init__()
