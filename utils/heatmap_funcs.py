@@ -129,6 +129,9 @@ def pred_joints_from_heatmaps(heatmaps):
     max_vals = torch.amax(flat_heatmaps, 2).values.reshape((batches, num_kpts, 1))
 
     joint_pred = torch.zeros((batches, num_kpts, 3))
+    joint_pred[:,:,0] = max_idxs % heatmaps.shape[3] # double check dimension 3 is width and not height
+    joint_pred[:,:,1] = max_idxs // heatmaps.shape[3]
+    joint_pred[:,:,2] = max_vals
     
     return joint_pred
     

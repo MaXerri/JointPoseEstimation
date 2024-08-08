@@ -11,7 +11,7 @@ class CustomDataset():
   Args: 
       train_data: list of tuples/lists in the following format: [image_labels, image_name, img_dir, sigma, inv] 
 
-      - image_labels: list of joint annotations of shape (n,14,3)
+      - image_labels: list of joint annotations of shape (14,3)
       - image_name: list of image names corresponding to the joint annotations at the same index 
       - img_dir: image directory to the location storing images
       - sigma: gaussian blur standrad deviation
@@ -43,8 +43,9 @@ class CustomDataset():
     # label = generate_single_image_gaussian(self.image_labels[idx], (56,56), self.sigma[idx], self.inv[idx])
     label = generate_single_image_gaussian(self.train_data[idx][0], (56,56), self.train_data[idx][3], self.train_data[idx][4])
 
-    target_weight =self.train_data[idx][0][2]
+    target_weight =self.train_data[idx][0][:,2]
+    
     if self.train_data[idx][4]: #idx
-      target_weight = not target_weight
+      target_weight = 1- target_weight # inverts the tensor of 0s and 1s   
 
     return image, label, target_weight, img_path
