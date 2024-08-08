@@ -23,7 +23,6 @@ class CustomDataset():
   def __init__(self, train_data):
 
     self.train_data = train_data
-
     
     # can add transforms if we need/want
 
@@ -35,7 +34,6 @@ class CustomDataset():
     # image: torch.Tensor -> pytorch tensor representing image specified
     # label: list[dict] -> each dict contains x and y coordinate, joint id, and whether the joint is visible
 
-    
     # img_path = self.img_dir + "resized_im" + '0'*(5-len(str(idx+1))) + str(idx + 1) + ".jpg"
     #img_path = self.img_dir[idx] + self.image_names[idx]
     img_path = self.train_data[idx][2] + self.train_data[idx][1]
@@ -45,4 +43,8 @@ class CustomDataset():
     # label = generate_single_image_gaussian(self.image_labels[idx], (56,56), self.sigma[idx], self.inv[idx])
     label = generate_single_image_gaussian(self.train_data[idx][0], (56,56), self.train_data[idx][3], self.train_data[idx][4])
 
-    return image, label, img_path
+    target_weight =self.train_data[idx][0][2]
+    if self.train_data[idx][4]: #idx
+      target_weight = not target_weight
+
+    return image, label, target_weight, img_path

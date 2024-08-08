@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter
 from scipy.ndimage import zoom 
+import torch
 
 def generate_gaussian_heatmap(list_of_joint_list, resolution_size, sigma=1.5):
     """
@@ -107,3 +108,28 @@ def upsample_heatmap(heatmaps, target_resolution):
             upsampled_heatmap = zoom(heatmaps[b][j], (scale_factor_row, scale_factor_col), order=1)
             output[b][j] = upsampled_heatmap
     return output
+
+
+def pred_joints_from_heatmaps(heatmaps):
+    """
+    Predict the joint coordinates from the heatmaps.
+
+    Parameters:
+    - heatmaps: 4D NumPy array (batch_size, keypoints, height, width) 
+
+    Returns:
+    - joint_pred: (batch_size, keypoints, 3) wher dimension 2 is the x, y, and confidence value of the joint.
+    """
+    batches = heatmaps.shape[0]
+    num_kpts = heatmaps.shape[1]
+    heatmaps = heatmaps.copy()
+    flat_heatmaps = heatmaps.reshape((batches, num_kpts, -1))
+
+    max_idxs = torch.argmax(flat_heatmaps, 2).reshape((batches, num_kpts, 1))
+    max_vals = torch.amax(flat_heatmaps, 2).values.reshape((batches, num_kpts, 1))
+
+    joint_pred = torch.zeros((batches, num_kpts, 3))
+    
+    return joint_pred
+    
+
