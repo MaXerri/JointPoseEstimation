@@ -11,7 +11,7 @@ class JointsMSELoss(nn.Module):
 
   def __init__(self, use_visibility_weight = True):
     super(JointsMSELoss, self).__init__()
-    self.mse = nn.MSELoss(reduction="sum")
+    self.mse = nn.MSELoss(reduction="mean")
     self.use_visibility_weight = use_visibility_weight
     
   def forward(self, output, target, target_weights):
