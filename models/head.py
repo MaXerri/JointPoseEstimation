@@ -30,8 +30,9 @@ class DecoderHeadSimple(nn.Module):
 
 
     def forward(self, x):
+        batch = x.shape[0]
         x =torch.swapaxes(x,1, 2) # -> (batches, channels, #patches)
-        x = x.view((-1, HIDDEN_SIZE, PATCH_DIM, PATCH_DIM)) # ->( batches, channels, height, width)
+        x = x.view((batch, HIDDEN_SIZE, PATCH_DIM, PATCH_DIM)) # ->( batches, channels, height, width)
         
 
         x = self.deconv_layers(x) 

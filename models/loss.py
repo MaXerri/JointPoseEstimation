@@ -40,7 +40,7 @@ class JointsMSELoss(nn.Module):
       else:
         loss +=self.mse(heatmap_pred, heatmap_target)
     # average loss per joint because number of joints in images are variable
-    return loss / num_joints 
+    return (loss / num_joints) / batch_size
   
 
 class PenalizedJointsMSELoss(nn.Module):
