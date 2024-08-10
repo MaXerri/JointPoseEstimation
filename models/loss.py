@@ -102,7 +102,7 @@ class HeatmapWingLoss(nn.Module):
       - target weight: (batch size, num_joints, 1): based on the visibility of the joint
             
     """
-    print( target_weights.unsqueeze(-1).unsqueeze(-1).shape)
+   
     loss = 0
     if self.use_visibility_weight:
       loss +=self.WingLoss(target_weights.unsqueeze(-1).unsqueeze(-1) * \
