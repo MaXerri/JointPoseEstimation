@@ -8,6 +8,14 @@ from models.constants_embeddings import HIDDEN_SIZE, INITIALIZER_RANGE
 class TransformerPoseModel(nn.Module):
     """
     Transformer based pose estimation model.
+
+    Params:
+
+    num_blocks: number of transformer blocks
+    num_keypoints: number of joint keypoints to predict
+    num_deconv_layers: number of deconvolution layers in deconv head
+    num_deconv_filters: for attention head
+    num_deconv_kernels: deconv kernel size for attention head
     """
     def __init__(self, num_blocks, num_keypoints=14, num_deconv_layers=2,
                  num_deconv_filters=(224, 224),
@@ -17,12 +25,8 @@ class TransformerPoseModel(nn.Module):
         self.num_deconv_layers = num_deconv_layers
         self.num_deconv_filters = num_deconv_filters
         self.num_deconv_kernels = num_deconv_kernels
-        self.embeds = Embeddings()
-        self.blocks = nn.ModuleList([])
 
-        for _ in range(num_blocks):
-            block = TransformerBlock()
-            self.blocks.append(block)
+        self.transformer_backbone = TransformerBackbone(num_blocks, num_keypoints)
 
         self.head = DecoderHeadSimple(
             in_channels= HIDDEN_SIZE, # gotta check this info I think its the size of the patch 
@@ -32,8 +36,38 @@ class TransformerPoseModel(nn.Module):
             num_deconv_kernels=num_deconv_kernels
         )
 
-        self.apply(self._init_weights_backbone) # initialize weights
-    
+        # initialize model weights - non-pretrained
+        self.transformer_backbone.init_weights_backbone()
+        self.head.init_weights()
+        
+    def forward(self, x, mode):
+        
+        x = self.transformer_backbone(x, mode) # pass through the backbone
+
+        #print("postT_trans shape")
+        #print(x.shape)
+        x = self.head(x) # pass through the decoder head
+
+        return x
+
+
+class TransformerBackbone(nn.Module):
+    """
+    Transformer backbone for the pose estimation Model
+    """
+
+    def __init__(self, num_blocks, num_keypoints=14):
+        super().__init__()
+
+        self.num_keypoints = num_keypoints
+        self.embeds = Embeddings()
+        self.blocks = nn.ModuleList([])
+
+        for _ in range(num_blocks):
+            block = TransformerBlock()
+            self.blocks.append(block)
+
+
     def forward(self, x, mode):
 
         x = self.embeds(x) # pass to the patch embedding layer
@@ -44,31 +78,32 @@ class TransformerPoseModel(nn.Module):
         for blocks in self.blocks: # pass through the transformer blocks
             x = blocks(x, mode)
 
-        #print("postT_trans shape")
-        #print(x.shape)
-        x = self.head(x) # pass through the decoder head
+        return x 
 
-        return x
-
-    def _init_weights_backbone(self, module):
+    def init_weights_backbone(self):
         """
         Initializing the weights on non-pretrained model.  If model is every pretrained, modify and use pretrained weight
 
         initializer range - for std of weights
         """
-        if isinstance(module, (nn.Linear, nn.Conv2d)):
-            torch.nn.init.normal_(module.weight, mean=0.0, std=INITIALIZER_RANGE)
-            if module.bias is not None:
-                torch.nn.init.constant_(module.bias, 0.0)
-        elif isinstance(module, nn.LayerNorm):
-            module.bias.data.zero_()
-            module.weight.data.fill_(1.0)
-        elif isinstance(module, Embeddings):
-            module.position_embed.data = nn.init.trunc_normal_(
-                module.position_embed.data.to(torch.float32),
-                mean = 0.0,
-                std = INITIALIZER_RANGE
-            ).to(module.position_embed.data.dtype)
 
-        print("backbone weights initialized")
+        def _initialize(module):
+            if isinstance(module, (nn.Linear, nn.Conv2d)):
+                torch.nn.init.normal_(module.weight, mean=0.0, std=INITIALIZER_RANGE)
+                if module.bias is not None:
+                    torch.nn.init.constant_(module.bias, 0.0)
+            elif isinstance(module, nn.LayerNorm):
+                module.bias.data.zero_()
+                module.weight.data.fill_(1.0)
+            elif isinstance(module, Embeddings):
+                module.position_embed.data = nn.init.trunc_normal_(
+                    module.position_embed.data.to(torch.float32),
+                    mean = 0.0,
+                    std = INITIALIZER_RANGE
+                ).to(module.position_embed.data.dtype)
+            
+            print("backbone weights initialized")
 
+        self.apply(_initialize)
+
+        

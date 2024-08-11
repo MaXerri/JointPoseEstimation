@@ -28,8 +28,6 @@ class DecoderHeadSimple(nn.Module):
             padding=0
         )
 
-        self._init_weights()
-
 
     def forward(self, x):
         batch = x.shape[0]
@@ -93,21 +91,22 @@ class DecoderHeadSimple(nn.Module):
         """
         Initialize weights for the decoder head
         """
-        
+
         for _, m in self.deconv_layers.named_modules():
             
             if isinstance(m, nn.ConvTranspose2d):
-                nn.init.normal_(m, std=0.001)
+                nn.init.normal_(m.weight, std=0.001)
 
             elif isinstance(m, nn.BatchNorm2d):
-                nn.init.constant_(m, 1)
+                nn.init.constant_(m.weight, 1)
 
         for m in self.last_conv.modules():
 
             if isinstance(m, nn.Conv2d):
-                nn.init.normal_(m, std=0.001, bias=0)
+                nn.init.normal_(m.weight, std=0.001)
+                nn.init.constant_(m.bias, 0.0)
 
             elif isinstance(m, nn.BatchNorm2d):
-                nn.init.contant_(m, 1)
+                nn.init.contant_(m.weight, 1)
 
         print("head weights initialized")
