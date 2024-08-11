@@ -1,8 +1,9 @@
 import torch.nn as nn
+import torch
 from models.transformer_block import TransformerBlock
 from models.head import DecoderHeadSimple
 from models.embeddings import Embeddings
-from models.constants_embeddings import HIDDEN_SIZE # 768
+from models.constants_embeddings import HIDDEN_SIZE, INITIALIZER_RANGE
 
 class TransformerPoseModel(nn.Module):
     """
@@ -30,6 +31,8 @@ class TransformerPoseModel(nn.Module):
             num_deconv_filters=num_deconv_filters,
             num_deconv_kernels=num_deconv_kernels
         )
+
+        self.apply(self._init_weights_backbone) # initialize weights
     
     def forward(self, x, mode):
 
@@ -46,3 +49,26 @@ class TransformerPoseModel(nn.Module):
         x = self.head(x) # pass through the decoder head
 
         return x
+
+    def _init_weights_backbone(self, module):
+        """
+        Initializing the weights on non-pretrained model.  If model is every pretrained, modify and use pretrained weight
+
+        initializer range - for std of weights
+        """
+        if isinstance(module, (nn.Linear, nn.Conv2d)):
+            torch.nn.init.normal_(module.weight, mean=0.0, std=INITIALIZER_RANGE)
+            if module.bias is not None:
+                torch.nn.init.constant_(module.bias, 0.0)
+        elif isinstance(module, nn.LayerNorm):
+            module.bias.data.zero_()
+            module.weight.data.fill_(1.0)
+        elif isinstance(module, Embeddings):
+            module.position_embed.data = nn.init.trunc_normal_(
+                module.position_embed.data.to(torch.float32),
+                mean = 0.0,
+                std = INITIALIZER_RANGE
+            ).to(module.position_embed.data.dtype)
+
+        print("backbone weights initialized")
+

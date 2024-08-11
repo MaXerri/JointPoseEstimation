@@ -7,3 +7,4 @@ BATCH_SIZE = 128
 ATTENTION_HEADS = 12
 PATCH_DIM = 14 # how many patches fit across image for a square image
 IMAGE_SIZE = (224,224)
+INITIALIZER_RANGE = 0.02

@@ -28,6 +28,8 @@ class DecoderHeadSimple(nn.Module):
             padding=0
         )
 
+        self._init_weights()
+
 
     def forward(self, x):
         batch = x.shape[0]
@@ -86,3 +88,26 @@ class DecoderHeadSimple(nn.Module):
             raise ValueError("Incompatible deconvolution kernel size.")
 
         return deconv_kernel, padding, output_padding
+    
+    def init_weights(self): 
+        """
+        Initialize weights for the decoder head
+        """
+        
+        for _, m in self.deconv_layers.named_modules():
+            
+            if isinstance(m, nn.ConvTranspose2d):
+                nn.init.normal_(m, std=0.001)
+
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.constant_(m, 1)
+
+        for m in self.last_conv.modules():
+
+            if isinstance(m, nn.Conv2d):
+                nn.init.normal_(m, std=0.001, bias=0)
+
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.contant_(m, 1)
+
+        print("head weights initialized")
