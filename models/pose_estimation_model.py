@@ -4,6 +4,7 @@ from models.transformer_block import TransformerBlock
 from models.head import DecoderHeadSimple
 from models.embeddings import Embeddings
 from models.constants_embeddings import HIDDEN_SIZE, INITIALIZER_RANGE
+from models.vit_pretrained import PretrainedViTModel
 
 class TransformerPoseModel(nn.Module):
     """
@@ -19,14 +20,20 @@ class TransformerPoseModel(nn.Module):
     """
     def __init__(self, num_blocks, num_keypoints=14, num_deconv_layers=2,
                  num_deconv_filters=(224, 224),
-                 num_deconv_kernels=(2, 2)):
+                 num_deconv_kernels=(2, 2),
+                 pretrained_model=None):
         super().__init__()
         self.num_keypoints = num_keypoints
         self.num_deconv_layers = num_deconv_layers
         self.num_deconv_filters = num_deconv_filters
         self.num_deconv_kernels = num_deconv_kernels
+        self.pretrained_model = pretrained_model
 
-        self.transformer_backbone = TransformerBackbone(num_blocks, num_keypoints)
+        if pretrained_model is None:
+            self.transformer_backbone = TransformerBackbone(num_blocks, num_keypoints)
+        else:
+            self.transformer_backbone = PretrainedViTModel() # initialize pretrained model
+            self.transformer_backbone.classifier = torch.nn.Identity() # remove the classifier layer extracting last hidden layer
 
         self.head = DecoderHeadSimple(
             in_channels= HIDDEN_SIZE, # gotta check this info I think its the size of the patch 
@@ -41,9 +48,10 @@ class TransformerPoseModel(nn.Module):
         self.head.init_weights()
         
     def forward(self, x, mode):
-        
-        x = self.transformer_backbone(x, mode) # pass through the backbone
-
+        if self.pretrained_model is None:
+            x = self.transformer_backbone(x, mode) # pass through the backbone
+        else:
+            x = self.transformer_backbone(x)
         #print("postT_trans shape")
         #print(x.shape)
         x = self.head(x) # pass through the decoder head
