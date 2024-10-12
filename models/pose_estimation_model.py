@@ -44,7 +44,9 @@ class TransformerPoseModel(nn.Module):
         )
 
         # initialize model weights - non-pretrained
-        self.transformer_backbone.init_weights_backbone()
+        if pretrained_model is None:
+            self.transformer_backbone.init_weights_backbone()
+        
         self.head.init_weights()
         
     def forward(self, x, mode):
@@ -52,8 +54,8 @@ class TransformerPoseModel(nn.Module):
             x = self.transformer_backbone(x, mode) # pass through the backbone
         else:
             x = self.transformer_backbone(x)
-        #print("postT_trans shape")
-        #print(x.shape)
+        print("post backbone shape")
+        print(x.shape)
         x = self.head(x) # pass through the decoder head
 
         return x
