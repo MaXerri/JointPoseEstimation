@@ -19,12 +19,12 @@ class PretrainedViTModel(nn.Module):
         self.vit = model
 
         # Freeze embeddings
-        for param in self.vit.embeddings.parameters():
-            param.requires_grad = False
+        #for param in self.vit.embeddings.parameters():
+        #    param.requires_grad = False
 
         # Freeze encoder
-        for param in self.vit.encoder.parameters():
-            param.requires_grad = False
+        #for param in self.vit.encoder.parameters():
+        #    param.requires_grad = False
 
         # pooler module needs to have trainable weights as they are initializde to 0
 
