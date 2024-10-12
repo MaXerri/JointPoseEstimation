@@ -54,8 +54,8 @@ class TransformerPoseModel(nn.Module):
             x = self.transformer_backbone(x, mode) # pass through the backbone
         else:
             x = self.transformer_backbone(x)
-        print("post backbone shape")
-        print(x.shape)
+        
+        # print(x.shape)
         x = self.head(x) # pass through the decoder head
 
         return x
