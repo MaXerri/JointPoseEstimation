@@ -2,6 +2,8 @@ import os
 import pandas as pd
 from torchvision.io import read_image
 from utils.heatmap_funcs import generate_single_image_gaussian
+from PIL import Image
+from torchvision import transforms
   
 class CustomDataset():
   """
@@ -34,10 +36,18 @@ class CustomDataset():
     # image: torch.Tensor -> pytorch tensor representing image specified
     # label: list[dict] -> each dict contains x and y coordinate, joint id, and whether the joint is visible
 
-    # img_path = self.img_dir + "resized_im" + '0'*(5-len(str(idx+1))) + str(idx + 1) + ".jpg"
+    
     #img_path = self.img_dir[idx] + self.image_names[idx]
     img_path = self.train_data[idx][2] + self.train_data[idx][1]
-    image = read_image(img_path)
+    image = Image.open(img_path) # (b, h, w, c)
+    # read_image returns (b, c, h, w) but we switched 
+
+    preprocess = transforms.Compose([
+        transforms.ToTensor(), # convert pixels to range [0,1]
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]) # normalize for imagenet
+    ])
+
+    image = preprocess(image)
 
     # generate heatmap label 
     # label = generate_single_image_gaussian(self.image_labels[idx], (56,56), self.sigma[idx], self.inv[idx])
