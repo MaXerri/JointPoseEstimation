@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from transformers import ViTModel
+from transformers import ViTModel, ViTConfig
 
 
 class PretrainedViTModel(nn.Module):
@@ -14,9 +14,10 @@ class PretrainedViTModel(nn.Module):
         super(PretrainedViTModel, self).__init__()
         
         # Load the pretrained ViT model
-        model = ViTModel.from_pretrained(pretrained_model_name)
+        config = ViTConfig.from_pretrained(pretrained_model_name)
+        config.add_pooling_layer = False # remove pooler layer
 
-        self.vit = model
+        self.vit = ViTModel(config)
 
         # Freeze embeddings
         #for param in self.vit.embeddings.parameters():
