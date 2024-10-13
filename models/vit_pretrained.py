@@ -16,9 +16,9 @@ class PretrainedViTModel(nn.Module):
         # Load the pretrained ViT model
         config = ViTConfig.from_pretrained(pretrained_model_name)
         config.add_pooling_layer = False # remove pooler layer
-
+        
         self.vit = ViTModel(config)
-
+        self.vit.pooler = torch.nn.Identity()
         # Freeze embeddings
         #for param in self.vit.embeddings.parameters():
         #    param.requires_grad = False
