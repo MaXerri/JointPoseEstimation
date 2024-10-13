@@ -17,8 +17,8 @@ def resize_single_joint(joints, resize_dim, original_dim):
     """
     new = np.zeros((14,3))
     for idx, point in enumerate(joints):
-        x1 = int((point[0] * (resize_dim[0] / original_dim[0])))
-        y1 = int((point[1] * (resize_dim[1] / original_dim[1])))
+        x1 = round((point[0] * (resize_dim[0] / original_dim[0])))
+        y1 = round((point[1] * (resize_dim[1] / original_dim[1])))
         new[idx,:] = [x1,y1,point[2]] # append resized coordinate
     return new
 
