@@ -20,7 +20,7 @@ class TransformerPoseModel(nn.Module):
     """
     def __init__(self, num_blocks, num_keypoints=14, num_deconv_layers=2,
                  num_deconv_filters=(224, 224),
-                 num_deconv_kernels=(2, 2),
+                 num_deconv_kernels=(4, 4),
                  pretrained_model=None):
         super().__init__()
         self.num_keypoints = num_keypoints
