@@ -18,5 +18,7 @@ pip-log.txt
 
 # personal additions
 Data/
-personal_mx.ipynb
+personal*
+kaggle*
+
 test.ipynb
