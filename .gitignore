@@ -10,9 +10,11 @@ var/
 .env
 env/
 **/*.ipynb_checkpoints/
-
+.venv/
+.DS_Store
 # Installer logs
 pip-log.txt
+
 
 # personal additions
 Data/

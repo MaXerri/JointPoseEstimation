@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Upload</title>
+</head>
+
+<body>
+    <form action="\upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required>
+        <button type="submit" name="submit">Upload Image</button>
+    </form>
+
+    <h1>Generated Image</h1>
+    <img src="\image" alt="Generated Image">
+</body>
+</html>
