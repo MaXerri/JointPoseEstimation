@@ -15,10 +15,8 @@ env/
 # Installer logs
 pip-log.txt
 
-
 # personal additions
 Data/
 personal*
-kaggle*
-
+kaggle.ipynb
 test.ipynb
