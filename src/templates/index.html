@@ -3,15 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Image Upload</title>
+
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 50px;
+        }
+        .imageDisplay {
+            text-align: center;
+        }
+        .query {
+            text-align: center;
+        }
+        
+    </style>
 </head>
 
 <body>
-    <form action="\upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" accept="image/*" required>
-        <button type="submit" name="submit">Upload Image</button>
-    </form>
+    <h1>Human Pose Estimation Calculator</h1>
+    <div class="query">
+        <form action="\upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="image" accept="image/*" required>
+            <button type="submit" name="submit">Upload Image</button>
+        </form>
+    </div>
+    <br>
+    <div class="imageDisplay">
+        <h2>Uploaded Image will appear here:</h2>
+        <img id="picture" src="data:image/png;base64,{{ img_data}}" >
+    </div>
 
-    <h1>Generated Image</h1>
-    <img src="\image" alt="Generated Image">
 </body>
 </html>

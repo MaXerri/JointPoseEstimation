@@ -1,9 +1,15 @@
 import io 
 from PIL import Image
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, redirect, url_for
 from network import run_model
 from io import BytesIO
+import numpy as np
+import torch
+import base64
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+
 
 app = Flask(__name__, template_folder='templates')
 
@@ -20,17 +26,23 @@ def upload():
     file = request.files['image']
 
     if file:
-        img = Image.open(io.BytesIO(file.read()))
+        img = io.BytesIO(file.read())
 
-        fig, ax = run_model(img)
+        # model is set in evaluation mode earlier 
+        with torch.no_grad():
+            f, ax = run_model(img) # output image generated in network.py
 
-        # save the plot to a BytesI) object (in memory buffer)
+        # save the plot to a BytesI0 object (in memory buffer)
         buf = BytesIO()
         plt.savefig(buf, format='png')
         buf.seek(0)
+        encoded_img_data = base64.b64encode(buf.getvalue()).decode('utf-8')
+        plt.close()
 
         #send the image as as a response:
-        return send_file(buf, mimetype='image/png')
+        #return send_file(buf, mimetype='image/png')
+        return render_template('index.html', img_data=encoded_img_data)
+    
     
 
 if __name__ == '__main__':

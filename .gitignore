@@ -20,3 +20,5 @@ Data/
 personal*
 kaggle.ipynb
 test.ipynb
+*.npy
+*.pth
